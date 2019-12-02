@@ -1,0 +1,37 @@
+---
+title: 'Day 1: Caching Action'
+date: 2019-12-01
+---
+
+If you wish to cache dependencies or build outputs between runs, GitHub's official [Cache Action](https://github.com/marketplace/actions/cache) solves this.
+
+## Example Usage
+
+This can cache absolutely anything you wish, regardless of platform or language.
+
+For instance, if you are running Node tests in a CI/CD situation, if you cache the yarn cache, it will speed up the `yarn` up a bit. (It is reccomended that you don't cache node modules as it could cause issues as you swap between node versions & architectures).
+
+```yaml
+steps:
+  - name: Get yarn cache
+    id: yarn-cache
+    run: echo "::set-output name=dir::$(yarn cache dir)"
+  
+  - name: Cache yarn cache
+    uses: actions/cache@v1
+    id: cache-yarn
+    with:
+      path: ${{ steps.yarn-cache.outputs.dir }}
+      key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      restore-keys: |
+        ${{ runner.os }}-yarn-
+  
+  - run: yarn
+  - run: yarn test
+```
+
+It creates a hash based string using the contents of the lockfile so it will invalidate the cache if the lockfile changes. Then here, the `yarn` run will be extremely sped up as it doesn't need to hit the internet to pull any dependencies down.
+
+## Limits
+
+Each cache can have 400MB of cached content which is a gzipped tarball. The repo at large can have up to 2GB of caches. It will remove old caches either after the limit is hit or after a cache has been not accessed in a week. 

@@ -1,0 +1,30 @@
+---
+title: 'Day 2: Optimizing Images'
+date: 2019-12-02
+---
+
+When adding images into projects, they sometimes include a lot of metadata or are saved in formats that have large file sizes by default. The folks over at [Calibre](https://calibreapp.com/) created an action called [image-actions](https://github.com/marketplace/actions/image-actions) which provides a way to automatically compress JPGs, PNGs, and WebP images.
+
+## Example Usage
+
+As in their example, a use case is to optimize images in Pull Requests:
+
+```yaml
+name: Compress images
+on: pull_request
+jobs:
+  build:
+    name: calibreapp/image-actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: calibreapp/image-actions
+        uses: docker://calibreapp/github-image-actions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+so then if you had this in a project and created a PR that added some images, it would optimize them, make a new commit to the PR, and then add a comment saying which ones were compressed.
+
+![Comment in PR showing images compressed](https://user-images.githubusercontent.com/924/62024579-e1470d00-b218-11e9-8655-693ea42ba0f7.png)
+

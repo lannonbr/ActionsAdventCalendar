@@ -1,0 +1,35 @@
+---
+title: 'Day 3: Audit websites automaticallly with Lighthouse'
+date: 2019-12-03
+---
+
+Google's [Lighthouse](https://developers.google.com/web/tools/lighthouse) tool provides website auditing that is both built into the Chrome web browser and accessible as a Node module. With [Lighthouse-CI](https://github.com/GoogleChrome/lighthouse-ci), you can run Lighthouse in CI environments and send results to a dashboard.
+
+[Treo.sh](https://treo.sh/) wrote a GitHub Action called [lighthouse-ci-action](https://github.com/marketplace/actions/lighthouse-ci-action) that wraps Lighthouse-CI into an action.
+
+## Example Usage
+
+Their basic example showcases hitting a live site and doing some audits and then saving the results using GitHub's [upload-artifact](https://github.com/actions/upload-artifact) action to save it as an artifact of the workflow.
+
+```yaml
+name: Lighthouse
+on: push
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v2
+        with:
+          urls: |
+            https://treo.sh/
+            https://treo.sh/demo
+      - name: Save results
+        uses: actions/upload-artifact@v1
+        with:
+          name: lighthouse-results
+          path: '.lighthouseci' # This will save the Lighthouse results as .json files
+```
+
+As well, instead of saving as an artifact here, You could take those results and save them to any external service for later usage or use the [`upload`](https://github.com/marketplace/actions/lighthouse-ci-action#upload) parameter of this action to authenticate and send the results to a [LHCI server](https://github.com/GoogleChrome/lighthouse-ci/blob/master/docs/recipes/docker-server/README.md) that can provide side-by-side changes between audits to see how things change over time.

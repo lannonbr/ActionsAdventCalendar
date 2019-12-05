@@ -1,0 +1,25 @@
+---
+title: 'Day 4: Send Text messages with Twilio'
+date: 2019-12-04
+---
+
+The [twilio-sms](https://github.com/marketplace/actions/twilio-sms) action provides a seamless API to send text messages as part of your GitHub Actions workflows.
+
+## Example Usage
+
+All that is needed to send a message is some credentials from Twilio that are passed in as environment variables and then you can generate a message using a twilio phone number, the number you want to send to, and the message itself.
+
+```yaml
+- name: 'Sending SMS Notification'
+  uses: twilio-labs/actions-sms@v1
+  with:
+    fromPhoneNumber: '+1(234)5678901'
+    toPhoneNumber: '+1(234)3334444'
+    message: 'Hello from Twilio'
+  env:
+    TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+    TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+    TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+```
+
+As the message is just a string, you could run another action somewhere and then send the results of the action as a text message. Some possible ideas could include sending alerts when deployments fail, results from website audits, or anything that you can think of to provide information faster to yourself without needing to hop onto GitHub.

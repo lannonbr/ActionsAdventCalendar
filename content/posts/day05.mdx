@@ -1,0 +1,26 @@
+---
+title: 'Day 5: Take Screenshots with Puppeteer'
+date: 2019-12-05
+---
+
+Today I wanted to show off one of my own personal Actions I wrote. [puppeteer-screenshot-action](https://github.com/marketplace/actions/puppeteer-screenshot-action) provides a way to generate screenshots of sites using [Puppeteer](https://developers.google.com/web/tools/puppeteer).
+
+## Example Usage
+
+All that is needed to send a message is some credentials from Twilio that are passed in as environment variables and then you can generate a message using a twilio phone number, the number you want to send to, and the message itself.
+
+The most minimal example is taking a snapshot of a page. you pass in a URL as a parameter and it will generate a file at `$GITHUB_WORKSPACE/screenshots/screenshot-${timestamp}.png` where the timestamp is the unix timestamp of when the image was taken.
+
+```yaml
+steps:
+  - name: Take photo of github.com
+    uses: "lannonbr/puppeteer-screenshot-action@1.1.0"
+    with:
+      url: https://github.com
+```
+
+By default it is a 1920x1080 capture, but you can modify the viewport using optional `width` and `height` parameters. As well, if you want to take a screenshot of the entire page, setting `fullPage` to true will do such.
+
+You could use this Action in plenty of ways, but one way I am using it right now is taking a screenshot of one of my sites, [gatsby-github-stats](https://gatsby-github-stats.netlify.com/) after I update it every hour and pass the image up to AWS S3. Here's the [workflow](https://github.com/lannonbr/gatsby-github-stats/blob/master/.github/workflows/take-screenshot.yml) if you are curious. Then I can later grab all of the images and stitch them together into a timelapse.
+
+As well, you could also remix and extend this action to do more things with Puppeteer. Given it is a public and Open Source action, it is fully acceptable to take my action as starting template if you wish to go further.

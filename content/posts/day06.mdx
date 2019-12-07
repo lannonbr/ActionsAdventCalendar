@@ -1,0 +1,29 @@
+---
+title: 'Day 6: Label PRs upon Approval Criteria'
+date: 2019-12-06
+---
+
+[label-approved-pull-requests](https://github.com/marketplace/actions/label-approved-pull-requests) is an action created by the Pull Panda OSS team. It will check when reviews are given on a PR and when it hits a certain amount of approvals, will change the labels on the PR to indicate it is fully approved.
+
+## Example Usage
+
+In the following example, when a PR gets at least 2 approvals, it will have the "approved" label added to the PR.
+
+```yaml
+on: pull_request_review
+name: Label approved pull requests
+jobs:
+  labelWhenApproved:
+    name: Label when approved
+    runs-on: ubuntu-latest
+    steps:
+    - name: Label when approved
+      uses: pullreminders/label-when-approved-action@master
+      env:
+        APPROVALS: "2"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ADD_LABEL: "approved"
+        REMOVE_LABEL: "awaiting%20review"
+```
+
+As well, it removes a "awaiting review" label by using the `REMOVE_LABEL` environment variable.

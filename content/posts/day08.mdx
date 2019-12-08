@@ -1,0 +1,27 @@
+---
+title: 'Day 8: Run E2E tests with Cypress'
+date: 2019-12-08
+---
+
+[cypress-io/github-action](https://github.com/marketplace/actions/cypress-io) is the home for running E2E tests with [Cypress](https://www.cypress.io/) in GitHub Actions. by Jason Etcovich is an action which upload files into a release. 
+
+## Example Usage
+
+You could run the E2E tests on every push and if any issues arise, it will be found in the logs. All that is needed is to checkout the repo and then run the action.
+
+```yaml
+name: End-to-end tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+```
+
+The Cypress team as well provides plenty of various optional inputs and workflows in their [README](https://github.com/cypress-io/github-action#examples). From submitting, to their dashboards, changing to custom configs or directories, running in parallel, and more, it provides a powerful structure to running E2E tests in CI without any hassle of working around the platform.

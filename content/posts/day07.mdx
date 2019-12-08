@@ -1,0 +1,43 @@
+---
+title: 'Day 7: Upload files to GitHub releases'
+date: 2019-12-07
+---
+
+[upload-to-release](https://github.com/marketplace/actions/upload-to-release) by Jason Etcovich is an action which upload files into a release. 
+
+## Example Usage
+
+Say one manually creates a release, you can have a workflow that could build a docker image and upload the .tar output as a result. To run this, use the `release` trigger.
+
+```yaml
+name: build-docker-image
+
+on: release
+
+jobs:
+  build-docker-image:
+    name: Build and upload docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull source
+        uses: actions/checkout@v1
+
+      - name: Build Docker image
+        uses: actions/docker/cli@master
+        with:
+          args: build . -t my-image
+
+      - name: Save the image
+        uses: actions/docker/cli@master
+        with:
+          args: save my-image:latest
+
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: my-image.tar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+`GITHUB_TOKEN` is the only required secret and the `args` file takes a relative file and will attach it to the release.

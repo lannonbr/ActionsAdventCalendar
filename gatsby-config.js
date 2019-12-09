@@ -7,7 +7,7 @@ module.exports = {
   ],
   // Customize your site metadata:
   siteMetadata: {
-    title: `GitHub Actions Advent Calendar`,
+    title: `🎄 GitHub Actions Advent Calendar`,
     author: `Benjamin Lannon`,
     description: `A GitHub Actions Advent Calendar during December 2019`,
     social: [

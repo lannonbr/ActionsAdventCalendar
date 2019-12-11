@@ -1,0 +1,23 @@
+---
+title: "Day 10: Setup AWS Credentials"
+date: 2019-12-10
+---
+
+[aws-actions/configure-aws-credentials](https://github.com/marketplace/actions/configure-aws-credentials-action-for-github-actions) provides an interface to setup AWS credentials for usage in GitHub Actions.
+
+## Example Usage
+
+As a base, if you have an IAM user credentials, you can save them into GitHub Action's secrets in the settings tab and then add the action as follows:
+
+```yaml
+- name: Configure AWS Credentials
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    aws-region: us-east-2
+```
+
+The `access-key-id`, `aws-secret-access-key`, and `aws-reigon` are the three required parameters.
+
+Now if you use the `aws` cli or any client library of the aws-sdk tools, your setup will be properly authenticated using the provided user.

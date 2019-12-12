@@ -1,0 +1,21 @@
+---
+title: 'Day 11: Post to Slack'
+date: 2019-12-11
+---
+
+[pullreminders/slack-action](https://github.com/marketplace/actions/post-slack-message) will send a message to a slack channel.
+
+## Example Usage
+
+What is required is an access token generated from making a slack app to connect to Slack and then if you send in a stringified JSON message with a channel name and message, it will send the message out.
+
+```yaml
+- name: Notify slack
+  env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  uses: pullreminders/slack-action@master
+  with:
+    args: '{\"channel\":\"C1234567890\",\"text\":\"The tests were succesful\"}'
+```
+
+This could be used in response to things like a deploy or running tests and notifying people of a success or failure of some task.

@@ -1,0 +1,32 @@
+---
+title: 'Day 13: Check User Permissions to a Repo'
+date: 2019-12-13
+---
+
+Back with another of a personal action of mine, [lannonbr/repo-permission-check-action](https://github.com/marketplace/actions/repo-permission-check-action) will check the credential level of a user to the given repo.
+
+## Example Usage
+
+Say you have an Action make a comment in an issue to do some action by typing `/command` in a new comment. A maintainer may want to allow this only if a user has write access to the repo. using this action, you pass in a string of what permission level you require as a minimum.
+
+The 4 permission levels include:
+
+ - **none**: no access to a repo
+ - **read**: pull-only access to a repo
+ - **write**: pull and push access to a repo
+ - **admin**: pull, push, and administrator access to a repo.
+
+
+```yaml
+steps:
+  - name: "Check if user has write access"
+    uses: "lannonbr/repo-permission-check-action@2.0.0"
+    with:
+      permission: "write"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+So by passing in `write`, if you have either `write` or `admin`, the action will pass.
+
+`GITHUB_TOKEN` is required as an environment variable to authenticate with Octokit inside the action.

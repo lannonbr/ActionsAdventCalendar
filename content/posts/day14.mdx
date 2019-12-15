@@ -1,0 +1,18 @@
+---
+title: "Day 14: Pause execution of a job"
+date: 2019-12-14
+---
+
+This Action, [jakejarvis/wait-action](https://github.com/marketplace/actions/wait-sleep) will run the unix `sleep` command to wait for a designated time
+
+## Example Usage
+
+One usecase of this Action is if you send a webhook to do some process on a third-party service and you need to wait until it is done some action. You could write a polling action to check until it is done, but you here as well could just pause for a period of time.
+
+```yaml
+steps:
+  - name: Sleep for 30 seconds
+    uses: jakejarvis/wait-action@master
+    with:
+      time: "30s"
+```

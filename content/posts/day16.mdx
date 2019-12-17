@@ -1,0 +1,49 @@
+---
+title: "Day 16: Create Pull Requests"
+date: 2019-12-16
+---
+
+This Action, [peter-evans/create-pull-request](https://github.com/marketplace/actions/create-pull-request) by [Peter Evans](https://github.com/peter-evans) will generate Pull requests after making changes in the repo in a workflow.
+
+## Example Usage
+
+One usecase Peter made in his [examples](https://github.com/peter-evans/create-pull-request/blob/master/examples.md) is a workflow to update NPM modules once a week and then push a PR with the changes.
+
+```yaml
+name: Update Dependencies
+on:
+  schedule:
+    - cron: "0 10 * * 1"
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repo
+      - uses: actions/checkout@v1
+
+      # setup node 10
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "10.x"
+
+      # run npm-check-updates
+      - name: Update dependencies
+        id: vars
+        run: |
+          npm install -g npm-check-updates
+          ncu -u
+          npm install
+
+      # generate the PR
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: update dependencies
+          title: Automated Dependency Updates
+          body: This is an auto-generated PR with dependency updates.
+          branch: dep-updates
+          branch-suffix: none
+```
+
+The `GITHUB_TOKEN` is required. Otherwise all other fields are optional but can be set to add labels, body, etc to the PR rather needing to do it once the PR is made. `title`, `commit-message`, `branch`, and `body` are good to fill in.

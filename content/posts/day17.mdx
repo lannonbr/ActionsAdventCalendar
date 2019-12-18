@@ -1,0 +1,34 @@
+---
+title: "Day 17: Set one of your pinned cards to your language usage with WakaTime"
+date: 2019-12-17
+---
+
+[WakaTime](https://wakatime.com/) is a project that can track metrics of projects you work on or languages you use. With this action, [matchai/waka-box](https://github.com/marketplace/actions/waka-box) you can update a gist that is pinned to your repo page
+
+## Example Usage
+
+To update the gist, it needs an [API key](https://wakatime.com/settings/api-key) for WakaTime. As well given you are working outside the repo, the default `GITHUB_TOKEN` cannot be used and a personal access token needs to be used instead. Then if you copy the ID of the gist (for example gist.github.com/lannonbr/920ada24... would have a gist ID of 920ada24...)
+
+Then put all of these variables and secrets into an example workflow like such:
+
+```yaml
+name: Update gist with WakaTime stats
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Update gist
+        uses: matchai/waka-box@master
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIST_ID: 968220c97e8da1d047a9a480fa432e54
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+```
+
+Once done, if you pin the gist, you now can have this on your main profile:
+
+![Example usage of WakaTime card](https://user-images.githubusercontent.com/4658208/60469862-2e40bf00-9c2c-11e9-87f7-afe164648de4.png)
